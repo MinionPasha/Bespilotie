@@ -3,8 +3,6 @@
 #include <iomanip>
 #include <cmath>
 
-// Конструкторы и общие методы
-
 Drone::Drone()
     : id(0),
     x(0.0),
@@ -32,7 +30,6 @@ Drone::Drone(int drone_id, double initial_battery)
 void Drone::set_position(double new_x,
                          double new_y,
                          double new_z) {
-    // Проверяем высоту
     if (new_z < 0.0) {
         std::cout << "Error: altitude cannot be negative\n";
         return;
@@ -58,7 +55,6 @@ bool Drone::is_flying() const {
 // Вариант 1. Управление полётом
 
 void Drone::takeoff() {
-    // Проверяем заряд перед взлётом
     if (battery < 10.0) {
         std::cout << "Takeoff denied: low battery\n";
         return;
@@ -68,8 +64,6 @@ void Drone::takeoff() {
         std::cout << "Drone is already flying\n";
         return;
     }
-
-    // Поднимаем аппарат на 1 метр
     flying = true;
     z = 1.0;
     battery -= 1.0;
@@ -83,7 +77,6 @@ void Drone::land() {
         return;
     }
 
-    // Обнуляем высоту при посадке
     flying = false;
     z = 0.0;
 
@@ -93,7 +86,6 @@ void Drone::land() {
 void Drone::move_to(double new_x,
                     double new_y,
                     double new_z) {
-    // Проверяем состояние, высоту и заряд
     if (!flying) {
         std::cout << "Move denied: drone is not flying\n";
         return;
@@ -109,7 +101,6 @@ void Drone::move_to(double new_x,
         return;
     }
 
-    // Меняем координаты и уменьшаем заряд
     x = new_x;
     y = new_y;
     z = new_z;
@@ -119,7 +110,6 @@ void Drone::move_to(double new_x,
 }
 
 void Drone::set_battery(double value) {
-    // Ограничиваем заряд от 0 до 100%
     if (value < 0.0) {
         battery = 0.0;
     } else if (value > 100.0) {
@@ -149,7 +139,6 @@ void Drone::print_info() const {
 }
 
 void Drone::emergency_land() {
-    // Сажаем аппарат без проверки заряда
     z = 0.0;
     flying = false;
 
@@ -163,7 +152,6 @@ void Drone::update_telemetry(double new_x,
                              double new_y,
                              double new_z,
                              double new_battery) {
-    // Проверяем координаты
     if (!std::isfinite(new_x) ||
         !std::isfinite(new_y) ||
         !std::isfinite(new_z)) {
@@ -181,7 +169,6 @@ void Drone::update_telemetry(double new_x,
         return;
     }
 
-    // Записываем данные после проверок
     set_position(new_x, new_y, new_z);
     set_battery(new_battery);
 
@@ -189,7 +176,6 @@ void Drone::update_telemetry(double new_x,
 }
 
 bool Drone::has_valid_telemetry() const {
-    // Отрицательный ID считаем ошибкой
     if (id < 0) {
         return false;
     }
@@ -225,7 +211,6 @@ Drone::Drone(int drone_id,
 }
 
 void Drone::connect() {
-    // Проверяем повторное подключение
     if (connected) {
         std::cout << "Drone is already connected\n";
         return;
@@ -244,7 +229,6 @@ void Drone::disconnect() {
         return;
     }
 
-    // Сбрасываем состояние подключения
     connected = false;
 
     std::cout << "Connection closed\n";
